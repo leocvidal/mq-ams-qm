@@ -1,0 +1,30 @@
+apiVersion: mq.ibm.com/v1beta1
+kind: QueueManager
+metadata:
+  annotations:
+    com.ibm.mq/write-defaults-spec: 'false'
+  name: mq-temp
+  namespace: jenkins
+spec:
+  license:
+    accept: true
+    license: L-VTPK-22YZPK
+    use: NonProduction
+  queueManager:
+    name: QUICKSTART
+    resources:
+      limits:
+        cpu: 500m
+      requests:
+        cpu: 500m
+    storage:
+      queueManager:
+        type: ephemeral
+  version: 9.3.5.1-r2
+  web:
+    console:
+      authentication:
+        provider: integration-keycloak
+      authorization:
+        provider: integration-keycloak
+    enabled: true
