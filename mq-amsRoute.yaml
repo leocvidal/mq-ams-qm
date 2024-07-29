@@ -2,7 +2,7 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: mq-amsroute 
-  namespace: mqdemocba
+  namespace: westpac-demo
 spec:
   host: tls3.chl.mq.ibm.com
   to:

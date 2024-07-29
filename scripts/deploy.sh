@@ -1,5 +1,5 @@
 #!/bin/bash
-oc project mqdemocba
+oc project westpac-demo
 set +e
 # Remove the runnning queue manager instance (if any)
 
