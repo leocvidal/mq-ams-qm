@@ -4,7 +4,7 @@ metadata:
   name: mq-ams
   annotations:
     com.ibm.mq/write-defaults-spec: 'false'
-  namespace: mq
+  namespace: mqdemocba
 spec:
   license:
     accept: true
