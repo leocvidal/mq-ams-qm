@@ -45,6 +45,7 @@ set +e
 # Remove the runnning queue manager instance (if any)
 
 # oc delete QueueManager mq-ams
+oc delete qmgr mq-ams
 
 # Delete the route object and secret for the QueueManager keystore (if any), and the mqsc configMap
 oc delete route mq-amsroute
