@@ -1,4 +1,6 @@
 #!/bin/bash
+export KEY=server.key
+export CERT=server.crt
 export KEYDB=server.kdb
 export KEYP12=server.p12
 export KEY_APP=application.key
@@ -29,8 +31,10 @@ openssl req \
 openssl pkcs12 -export -out ${KEYP12_APP} -inkey ${KEY_APP} -in ${CERT_APP} -passout pass:password
 ls -ali ${KEYP12_APP}
 
-echo "Delete files on mq containers..."
+echo "Delete files on mq container..."
 oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "rm /tmp/jenkins_pipeline/*"
+
+echo "Copying created cert files to the mq container..."
 oc cp ./${CERT} mq-temp-ibm-mq-0:/tmp/jenkins_pipeline -n jenkins -c qmgr
 oc cp ./${CERT_APP} mq-temp-ibm-mq-0:/tmp/jenkins_pipeline -n jenkins -c qmgr
 oc cp ./${KEYP12} mq-temp-ibm-mq-0:/tmp/jenkins_pipeline -n jenkins -c qmgr
@@ -79,8 +83,6 @@ echo "#### Adding certs and keys to JKS"
 oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqckm -cert -add -db /tmp/jenkins_pipeline/application.jks -file /tmp/jenkins_pipeline/${CERT} -pw password"
 #runmqckm -cert -import -file ${KEYP12_APP} -pw password -target application.jks -target_pw password
 oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqckm -cert -import -file /tmp/jenkins_pipeline/${KEYP12_APP} -pw password -target /tmp/jenkins_pipeline/application.jks -target_pw password"
-
-
 
 
 
