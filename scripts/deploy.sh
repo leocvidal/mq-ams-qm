@@ -4,6 +4,7 @@ export CERT=ams.crt
 export KEYDB=ams.kdb
 export KEYP12=ams.p12
 export PASSWORD=password
+export STASH=ams.sth
 
 # Create a private key and certificate in PEM format, for the server to use
 echo "#### Create a private key and certificate in PEM format, for the server to use"
@@ -31,6 +32,7 @@ echo "#### Creating kdb key store, for the server to use"
 oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqckm -keydb -create -db /tmp/jenkins_pipeline/${KEYDB} -pw ${PASSWORD} -type cms -stash"
 #copy .kdb to /conf directory
 oc cp mq-temp-ibm-mq-0:/tmp/jenkins_pipeline/${KEYDB} ./conf/${KEYDB} -n jenkins -c qmgr
+oc cp mq-temp-ibm-mq-0:/tmp/jenkins_pipeline/${STASH} ./conf/${STASH} -n jenkins -c qmgr
 
 echo "#### Adding certs and keys to kdb key store, for the server to use"
 #runmqckm -cert -add -db ${KEYDB} -file ${CERT} -stashed
