@@ -38,7 +38,7 @@ echo "#### Adding certs and keys to kdb key store, for the server to use"
 #runmqckm -cert -add -db ${KEYDB} -file ${CERT} -stashed
 oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqckm -cert -add -db /tmp/jenkins_pipeline/${KEYDB} -file /tmp/jenkins_pipeline/${CERT} -stashed"
 #runmqckm -cert -import -file ${KEYP12} -pw password -target ${KEYDB} -target_stashed
-oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqckm -cert -import -file /tmp/jenkins_pipeline/${KEYP12} -pw password -target /tmp/jenkins_pipeline/${KEYDB} -target_stashed"
+oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqckm -cert -import -file /tmp/jenkins_pipeline/${KEYP12} -pw password -target /tmp/jenkins_pipeline/${KEYDB} -target_stashed -label 1 -new_label label1"
 
 oc project westpac-demo
 set +e
