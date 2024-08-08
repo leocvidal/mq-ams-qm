@@ -69,6 +69,5 @@ oc create secret generic kdb-secret --from-file=ams.kdb=./conf/ams.kdb --from-fi
 oc create secret generic ams-conf --from-file=keystore.conf=./conf/keystore.conf
 
 oc create -f mqsc/mqsc_remote.yaml
-
-set -e
+ 
 oc apply -f mqNoinitC_remote.yaml
