@@ -31,16 +31,8 @@ oc cp ./${KEYP12} mq-temp-ibm-mq-0:/tmp/jenkins_pipeline -n jenkins -c qmgr
 echo "#### Creating kdb key store, for the server to use"
 oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqakm -keydb -create -db /tmp/jenkins_pipeline/${KEYDB} -pw ${PASSWORD} -stash"
 
-#copy .kdb to /conf directory
-# copying too early??
-# oc cp mq-temp-ibm-mq-0:/tmp/jenkins_pipeline/${KEYDB} ./conf/${KEYDB} -n jenkins -c qmgr
-# oc cp mq-temp-ibm-mq-0:/tmp/jenkins_pipeline/${STASH} ./conf/${STASH} -n jenkins -c qmgr
-
 # Add the key and certificate to a kdb key store, for the server to use
 echo "#### Adding certs and keys to kdb key store, for the server to use"
-#runmqckm -cert -add -db ${KEYDB} -file ${CERT} -stashed
-#oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqckm -cert -add -db /tmp/jenkins_pipeline/${KEYDB} -file /tmp/jenkins_pipeline/${CERT} -stashed"
-#runmqckm -cert -import -file ${KEYP12} -pw password -target ${KEYDB} -target_stashed
 oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqakm -cert -import -file /tmp/jenkins_pipeline/${KEYP12} -pw password -target /tmp/jenkins_pipeline/${KEYDB} -target_stashed -new_label label1"
 
 #Copy .kdb to /conf directory for Jenkins pipeline execution
@@ -70,6 +62,4 @@ oc create secret generic ams-conf --from-file=keystore.conf=./conf/keystore.conf
 
 oc create -f mqsc/mqsc.yaml
 
-set -e
-# oc apply -f mqeploy.yaml
 oc apply -f mqNoinitC.yaml
