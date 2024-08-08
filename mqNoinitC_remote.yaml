@@ -1,0 +1,85 @@
+apiVersion: mq.ibm.com/v1beta1
+kind: QueueManager
+metadata:
+  name: mq-ams-consumer-app
+  annotations:
+    com.ibm.mq/write-defaults-spec: 'false'
+  namespace: consumer-app
+spec:
+  license:
+    accept: true
+    #license: L-JTPV-KYG8TF # 9.4.0.0-r1
+    license: L-RJON-CD3JKX #9.3.0.4-r1
+    use: NonProduction
+  web:
+    enabled: false
+  queueManager:
+    imagePullPolicy: IfNotPresent
+    storage:
+      queueManager:
+        type: persistent-claim
+    resources:
+      limits:
+        cpu: '0.3'
+        memory: 4Gi
+      requests:
+        cpu: '0.3'
+        memory: 4Gi
+    availability:
+      updateStrategy: RollingUpdate
+      type: SingleInstance
+    #  type: NativeHA
+    name: QMAMS
+    mqsc:
+      - configMap:
+          name: ams1-mqsc-remote
+          items:
+          - ivt.mqsc      
+  template:
+    pod:
+      containers:
+        - env:
+            - name: MQSNOAUT
+              value: 'no'
+            - name: MQS_KEYSTORE_CONF
+              value: '/var/mqm/ams/keystore.conf'
+            - name: AMQ_CLOUD_PAK
+              value: 'true'
+          name: qmgr
+          lifecycle:
+            postStart:
+              exec:
+                command: [ "sh", "-c", "mkdir -p /mnt/mqm/data/ams && cp /mycerts/* /mnt/mqm/data/ams && cp /mnt/conf/* /mnt/mqm/data/ams" ]
+          volumeMounts:
+            - mountPath: /mnt/conf
+              name: conf
+            - mountPath: /mycerts
+              name: ams-secret
+      volumes:
+        - name: conf
+          secret:
+            defaultMode: 420
+            secretName: ams-conf
+            items:
+              - key: keystore.conf
+                path: keystore.conf    
+        - name: ams-secret
+          secret:
+            defaultMode: 420
+            items:
+              - key: ams.kdb
+                path: ams.kdb
+              - key: ams.sth
+                path: ams.sth
+            secretName: kdb-secret
+  version: 9.3.0.4-r1
+  pki:
+    keys:
+      - name: label1
+        secret:
+          secretName: mqamskey
+          items:
+            - tls.key
+            - tls.crt
+  imagePullSecrets:
+    - name: ibm-entitlement-key
