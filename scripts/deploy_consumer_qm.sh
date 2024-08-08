@@ -56,7 +56,7 @@ set +e
 oc delete qmgr mq-ams-consumer-app
 
 # Delete the route object and secret for the QueueManager keystore (if any), and the mqsc configMap
-oc delete route mq-amsroute-consumer-app
+oc delete route mq-ams-consumer-app-ibm-mq-qm
 oc delete secret mqamskey
 oc delete configMap ams1-mqsc-remote
 oc delete secret kdb-secret
