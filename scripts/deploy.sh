@@ -42,9 +42,8 @@ oc cp mq-temp-ibm-mq-0:/tmp/jenkins_pipeline/${STASH} ./conf/${STASH} -n jenkins
 #Inititate execution
 oc project westpac-demo
 set +e
-# Remove the runnning queue manager instance (if any)
 
-# oc delete QueueManager mq-ams
+# Remove the runnning queue manager instance (if any)
 oc delete qmgr mq-ams
 
 # Delete the route object and secret for the QueueManager keystore (if any), and the mqsc configMap
