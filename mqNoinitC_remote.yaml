@@ -29,7 +29,7 @@ spec:
       updateStrategy: RollingUpdate
       type: SingleInstance
     #  type: NativeHA
-    name: QMAMS
+    name: QMAMSREMOTE
     mqsc:
       - configMap:
           name: ams1-mqsc-remote
