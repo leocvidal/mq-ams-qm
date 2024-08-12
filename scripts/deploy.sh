@@ -7,16 +7,16 @@ export PASSWORD=password
 export STASH=ams.sth
 
 # Create a private key and certificate in PEM format, for the server to use
-echo "#### Create a private key and certificate in PEM format, for the server to use"
-openssl req \
-       -newkey rsa:1024 -nodes -keyout ${KEY} \
-       -subj "/CN=ams/O=mqams/C=AU" \
-       -x509 -days 3650 -out ${CERT}
+       echo "#### Create a private key and certificate in PEM format, for the server to use"
+       openssl req \
+              -newkey rsa:1024 -nodes -keyout ${KEY} \
+              -subj "/CN=ams/O=mqams/C=AU" \
+              -x509 -days 3650 -out ${CERT}
 
-ls -ali ${CERT}
+       ls -ali ${CERT}
 
-openssl pkcs12 -export -out ${KEYP12} -inkey ${KEY} -in ${CERT} -passout pass:password
-ls -ali ${KEYP12}
+       openssl pkcs12 -export -out ${KEYP12} -inkey ${KEY} -in ${CERT} -passout pass:password
+       ls -ali ${KEYP12}
 
 # Remove files from mq temp container under /tmp/jenkins_pipeline/
 echo "Delete files on mq container..."
@@ -45,6 +45,7 @@ set +e
 
 # Remove the runnning queue manager instance (if any)
 oc delete qmgr mq-ams
+oc delete pvc data-mq-ams-ibm-mq-0
 
 # Delete the route object and secret for the QueueManager keystore (if any), and the mqsc configMap
 oc delete route mq-amsroute

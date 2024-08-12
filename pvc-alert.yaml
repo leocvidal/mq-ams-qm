@@ -2,7 +2,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: pvc-usage-alerts
-  namespace: westpac-demo  # Replace with the correct namespace for Prometheus rules
+  namespace: openshift-monitoring  # Replace with the correct namespace for Prometheus rules
 spec:
   groups:
     - name: PVCUsageAlerts
