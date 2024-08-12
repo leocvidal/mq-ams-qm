@@ -12,7 +12,6 @@ spec:
           for: 5m
           labels:
             severity: warning
-            type: pvc-usage-alerts
           annotations:
             summary: "High PVC Storage Usage on {{ $labels.persistentvolumeclaim }}"
             description: "The PVC `data-mq-ams-ibm-mq-0` in the `westpac-demo` namespace is using more than 50% of its storage capacity."
