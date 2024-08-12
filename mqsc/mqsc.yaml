@@ -16,7 +16,7 @@ data:
     ***************************Definitions for the remote queue**********************
     DEFINE QREMOTE (PROTQ1) RNAME (PROTQ1) rqmname(QMAMSREMOTE) xmitq (QMAMS1XMIT)
     DEFINE CHANNEL ('TO.QMAMS1') CHLTYPE(SDR) DESCR('AMS Sender') TRPTYPE(TCP) XMITQ(QMAMS1XMIT) CONNAME('mq-ams-consumer-app-ibm-mq.consumer-app.svc.cluster.local(1414)') 
-    DEFINE QLOCAL(QMAMS1XMIT) DESCR('Transmission queue to QMAMS1') USAGE(XMITQ)
+    DEFINE QLOCAL(QMAMS1XMIT) DESCR('Transmission queue to QMAMS1') USAGE(XMITQ) TRIGGER TRIGTYPE(DEPTH) TRIGDPTH(1) TRIGDATA('TO.QMAMS1') INITQ ('SYSTEM.CHANNEL.INITQ')
     SET POLICY (PROTQ1) ENCALG(AES128) RECIP('C=AU, O=mqams, CN=ams') KEYREUSE(1) ACTION(REPLACE)
     *********************************************************************************
     ALTER AUTHINFO(SYSTEM.DEFAULT.AUTHINFO.IDPWOS) AUTHTYPE(IDPWOS) CHCKCLNT(NONE) ADOPTCTX(NO)
