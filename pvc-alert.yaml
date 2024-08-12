@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pvc-usage-alerts
+  namespace: westpac-demo  # Replace with the correct namespace for Prometheus rules
+spec:
+  groups:
+    - name: PVCUsageAlerts
+      rules:
+        - alert: MQPVCStorageUsageHigh
+          expr: 100.0 * kubelet_volume_stats_used_bytes{job="kubelet", namespace="westpac-demo", persistentvolumeclaim="data-mq-ams-ibm-mq-0"} / kubelet_volume_stats_capacity_bytes{job="kubelet", namespace="westpac-demo", persistentvolumeclaim="data-mq-ams-ibm-mq-0"} > 50
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High PVC Storage Usage on {{ $labels.persistentvolumeclaim }}"
+            description: "The PVC `data-mq-ams-ibm-mq-0` in the `westpac-demo` namespace is using more than 50% of its storage capacity."
+            runbook: "https://your-docs-url/runbooks/pvc_storage_full"

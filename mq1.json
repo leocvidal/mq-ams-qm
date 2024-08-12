@@ -1,0 +1,30 @@
+{
+  "channel":
+  [
+    {
+      "general":
+      {
+        "description": "TLS CHANNEL for mq1"
+      },
+      "name": "TLS3",
+      "clientConnection":
+      {
+        "connection":
+        [
+          {
+            "host": "mq-ams-ibm-mq-qm-westpac-demo.apps.668206944822e0001e418e0e.cloud.techzone.ibm.com",
+            "port": 443 
+          }
+        ],
+        "queueManager": "QMAMS"
+      },
+      "transmissionSecurity":
+      {
+        "cipherSpecification": "TLS_RSA_WITH_AES_128_CBC_SHA256",
+        "certificateLabel": "label1",
+        "certificatePeerName": ""
+      },
+      "type": "clientConnection"
+    }
+]
+}
