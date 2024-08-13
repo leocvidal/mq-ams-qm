@@ -42,7 +42,7 @@ spec:
             - name: MQSNOAUT
               value: 'no'
             - name: MQS_KEYSTORE_CONF
-              value: '/var/mqm/ams/keystore.conf'
+              value: '/var/mqm/ams/keystore.remote.conf'
             - name: AMQ_CLOUD_PAK
               value: 'true'
           name: qmgr
@@ -61,8 +61,8 @@ spec:
             defaultMode: 420
             secretName: ams-conf
             items:
-              - key: keystore.conf
-                path: keystore.conf    
+              - key: keystore.remote.conf
+                path: keystore.remote.conf    
         - name: ams-secret
           secret:
             defaultMode: 420
