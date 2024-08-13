@@ -6,42 +6,29 @@ export KEYP12=ams.p12
 export PASSWORD=password
 export STASH=ams.sth
 
-rm ${KEY}
-rm ${CERT}
-rm ${KEYP12}
-rm ${STASH}
-
-# Create a private key and certificate in PEM format, for the server to use
-echo "#### Create a private key and certificate in PEM format, for the server to use"
-openssl req \
-       -newkey rsa:1024 -nodes -keyout ${KEY} \
-       -subj "/CN=ams/O=mqams/C=AU" \
-       -x509 -days 3650 -out ${CERT}
-
-ls -ali ${CERT}
-
-openssl pkcs12 -export -out ${KEYP12} -inkey ${KEY} -in ${CERT} -passout pass:password
-ls -ali ${KEYP12}
+echo "DO I HAVE THE CERTS IN THE SECOND PIPELINE?"
+ls -ali ./${CERT}
+ls -ali ./${KEYP12}
 
 # Remove files from mq temp container under /tmp/jenkins_pipeline/
-echo "Delete files on mq container..."
-oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "rm /tmp/jenkins_pipeline/*"
+#echo "Delete files on mq container..."
+#oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "rm /tmp/jenkins_pipeline/*"
 
 # Copy files to mq temp container under /tmp/jenkins_pipeline folder
-echo "Copying created cert files to the mq container..."
-oc cp ./${CERT} mq-temp-ibm-mq-0:/tmp/jenkins_pipeline -n jenkins -c qmgr
-oc cp ./${KEYP12} mq-temp-ibm-mq-0:/tmp/jenkins_pipeline -n jenkins -c qmgr
+#echo "Copying created cert files to the mq container..."
+#oc cp ./${CERT} mq-temp-ibm-mq-0:/tmp/jenkins_pipeline -n jenkins -c qmgr
+#oc cp ./${KEYP12} mq-temp-ibm-mq-0:/tmp/jenkins_pipeline -n jenkins -c qmgr
 
 # Create the kdb key store
-echo "#### Creating kdb key store, for the server to use"
-oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqakm -keydb -create -db /tmp/jenkins_pipeline/${KEYDB} -pw ${PASSWORD} -stash"
+#echo "#### Creating kdb key store, for the server to use"
+#oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqakm -keydb -create -db /tmp/jenkins_pipeline/${KEYDB} -pw ${PASSWORD} -stash"
 
 # Add the key and certificate to a kdb key store, for the server to use
-echo "#### Adding certs and keys to kdb key store, for the server to use"
+#echo "#### Adding certs and keys to kdb key store, for the server to use"
 #runmqckm -cert -add -db ${KEYDB} -file ${CERT} -stashed
 #oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqckm -cert -add -db /tmp/jenkins_pipeline/${KEYDB} -file /tmp/jenkins_pipeline/${CERT} -stashed"
 #runmqckm -cert -import -file ${KEYP12} -pw password -target ${KEYDB} -target_stashed
-oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqakm -cert -import -file /tmp/jenkins_pipeline/${KEYP12} -pw password -target /tmp/jenkins_pipeline/${KEYDB} -target_stashed -new_label label1"
+#oc exec mq-temp-ibm-mq-0 -n jenkins -- bash -c "runmqakm -cert -import -file /tmp/jenkins_pipeline/${KEYP12} -pw password -target /tmp/jenkins_pipeline/${KEYDB} -target_stashed -new_label label1"
 
 #Copy .kdb to /conf directory for Jenkins pipeline execution
 oc cp mq-temp-ibm-mq-0:/tmp/jenkins_pipeline/${KEYDB} ./conf/${KEYDB} -n jenkins -c qmgr
